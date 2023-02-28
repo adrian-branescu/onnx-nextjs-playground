@@ -12,7 +12,7 @@ ort_session = ort.InferenceSession('./model/alexnet.onnx')
 for i in range(0, 100000):
 
     outputs = ort_session.run(None, {
-        'input1': np.random.randn(1, 3, 224, 224).astype(np.float32)
+        'input1': np.random.randn(5, 3, 224, 224).astype(np.float32)
     })
 
-    print(outputs[0])
+    print(outputs[0].shape)

@@ -13,5 +13,14 @@ torch.onnx.export(
     './model/alexnet.onnx',
     verbose=True,
     input_names=input_names,
-    output_names=output_names
+    output_names=output_names,
+    dynamic_axes={
+        'input1': {
+            0: 'batch_size'
+        },
+        'output1': {
+            0: 'batch_size'
+        }
+    },
+    opset_version=17
 )
