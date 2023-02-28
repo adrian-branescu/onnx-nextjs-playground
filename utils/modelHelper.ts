@@ -2,14 +2,22 @@ import * as ort from 'onnxruntime-web';
 import _ from 'lodash';
 import { imagenetClasses } from '../data/imagenet';
 
+let session: ort.InferenceSession;
+
 export async function runSqueezenetModel(preprocessedData: any): Promise<[any, number]> {
   
-  // Create session and set options. See the docs here for more options: 
-  //https://onnxruntime.ai/docs/api/js/interfaces/InferenceSession.SessionOptions.html#graphOptimizationLevel
-  const session = await ort.InferenceSession
-                          .create('./_next/static/chunks/pages/squeezenet1_1.onnx', 
-                          { executionProviders: ['webgl'], graphOptimizationLevel: 'all' });
-  console.log('Inference session created')
+  if (!session) {
+    // Create session and set options. See the docs here for more options: 
+    //https://onnxruntime.ai/docs/api/js/interfaces/InferenceSession.SessionOptions.html#graphOptimizationLevel
+    session = await ort.InferenceSession
+                            .create('./_next/static/chunks/pages/alexnet.onnx', 
+                            { executionProviders: ['webgl'], graphOptimizationLevel: 'all' });
+
+    console.log('Inference session created')
+  } else {
+    await session;
+  }
+
   // Run inference and get results.
   var [results, inferenceTime] =  await runInference(session, preprocessedData);
   return [results, inferenceTime];
